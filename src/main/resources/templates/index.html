@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Công Hoàn Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-msg">Lưu thành công!</span>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <header>
+      <!-- VIEW MODE header -->
+      <div class="view-only header-view">
+        <h1 id="view-name">Truong Cong Hoan</h1>
+        <h2 id="view-specialty">Chuyên ngành: Software Engineer</h2>
+      </div>
+      <!-- EDIT MODE header -->
+      <div class="edit-only hidden header-edit">
+        <div class="header-edit-fields">
+          <label class="field-label"><i class="fas fa-user"></i> Họ tên</label>
+          <input id="edit-name" type="text" placeholder="Nhập họ tên..." />
+          <label class="field-label" style="margin-top: 10px;"><i class="fas fa-graduation-cap"></i> Chuyên ngành</label>
+          <input id="edit-specialty" type="text" placeholder="Nhập chuyên ngành..." />
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== PROFILE CARD ===== -->
+    <div class="profile">
+
+      <!-- Avatar area -->
+      <div class="image-area">
+        <!-- VIEW MODE avatar -->
+        <div class="view-only avatar-wrapper" id="avatar-view-wrapper">
+          <img id="view-image" class="profile-image view-only" src="" alt="Avatar" style="display:none;">
+          <div id="avatar-placeholder" class="avatar-placeholder view-only">
+            <span id="avatar-initials">TH</span>
+          </div>
+        </div>
+
+        <!-- EDIT MODE avatar -->
+        <div class="edit-only hidden image-edit" id="avatar-edit-wrapper">
+          <div class="avatar-edit-preview-wrapper">
+            <img id="edit-image-preview" class="profile-image" src="" alt="Preview" style="display:none;">
+            <div id="edit-avatar-placeholder" class="avatar-placeholder">
+              <span id="edit-avatar-initials">TH</span>
+            </div>
+          </div>
+          <label class="upload-btn" for="edit-image">
+            <i class="fas fa-camera"></i> Đổi ảnh
+          </label>
+          <input id="edit-image" type="file" accept="image/*" style="display:none;" />
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="details">
+
+        <!-- Age -->
+        <div class="field-row">
+          <p class="view-only"><i class="fas fa-birthday-cake"></i> <strong>Tuổi:</strong> <span id="view-age"></span></p>
+          <p class="edit-only hidden">
+            <i class="fas fa-birthday-cake"></i> <strong>Tuổi:</strong>
+            <input id="edit-age" type="number" min="0" step="1" placeholder="Nhập tuổi..." />
+          </p>
+        </div>
+
+        <!-- Address -->
+        <div class="field-row">
+          <p class="view-only"><i class="fas fa-map-marker-alt"></i> <strong>Địa chỉ:</strong>
+            <span id="view-address" style="white-space: pre-line;"></span>
+          </p>
+          <p class="edit-only hidden">
+            <i class="fas fa-map-marker-alt"></i> <strong>Địa chỉ:</strong>
+            <textarea id="edit-address" rows="3" placeholder="Nhập địa chỉ..."></textarea>
+          </p>
+        </div>
+
+        <!-- Email -->
+        <div class="field-row">
+          <p class="view-only"><i class="fas fa-envelope"></i> <strong>Email:</strong> <span id="view-email"></span></p>
+          <p class="edit-only hidden">
+            <i class="fas fa-envelope"></i> <strong>Email:</strong>
+            <input id="edit-email" type="text" placeholder="Nhập email..." />
+          </p>
+        </div>
+
+        <!-- Phone -->
+        <div class="field-row">
+          <p class="view-only"><i class="fas fa-phone-alt"></i> <strong>Phone:</strong> <span id="view-phone"></span></p>
+          <p class="edit-only hidden">
+            <i class="fas fa-phone-alt"></i> <strong>Phone:</strong>
+            <input id="edit-phone" type="text" placeholder="Nhập số điện thoại..." />
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== ACTION BUTTONS ===== -->
+    <div class="actions">
+      <button id="btn-edit" type="button">
+        <i class="fas fa-pencil-alt"></i> Chỉnh sửa
+      </button>
+      <button id="btn-save" type="button" class="secondary hidden">
+        <i class="fas fa-save"></i> Lưu
+      </button>
+      <button id="btn-cancel" type="button" class="danger hidden">
+        <i class="fas fa-times"></i> Hủy
+      </button>
+    </div>
+
+    <!-- ===== SOCIAL LINKS ===== -->
+    <div class="social-links">
+      <a href="https://www.facebook.com/PhanNamk4/" class="bi bi-facebook" target="_blank" title="Facebook"></a>
+      <a href="https://www.instagram.com/#reactivated" class="bi bi-instagram" target="_blank" title="Instagram"></a>
+      <a href="https://www.tiktok.com/@ph_nam8834760?is_from_webapp=1&sender_device=pc" class="bi bi-tiktok" target="_blank" title="TikTok"></a>
+      <a href="https://www.linkedin.com/in/truong-hoan-6a61a0341/" class="bi bi-linkedin" target="_blank" title="LinkedIn"></a>
+    </div>
+
+  </div>
+
+  <script th:inline="javascript">
+    const SERVER_RUN_ID = /*[[${@serverRunId.runId}]]*/ 'unknown';
+
+    const draftKey  = 'truongCongHoan.profileDraft.v2';
+    const runIdKey  = 'truongCongHoan.runId.v2';
+
+    const DEFAULT_PROFILE = {
+      name:      'Truong Cong Hoan',
+      specialty: 'Software Engineer',
+      age:       22,
+      address:   "Quảng Phước - Đạo Nghĩa - Đắk R' Lấp - Đắk Nông",
+      email:     'Truonghoan.hutech@gmail.com',
+      phone:     '+84 396902445',
+      imageDataUrl: null
+    };
+
+    let currentProfile    = { ...DEFAULT_PROFILE };
+    let pendingImageDataUrl = null;
+
+    /* -------- helpers -------- */
+    const $  = (id) => document.getElementById(id);
+
+    function safeJsonParse(raw) {
+      try { return JSON.parse(raw); } catch { return null; }
+    }
+
+    /** Lấy 1–2 ký tự đầu của tên để làm initials */
+    function getInitials(name) {
+      if (!name) return '?';
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0][0].toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    /* -------- localStorage -------- */
+    function loadDraft() {
+      const raw = localStorage.getItem(draftKey);
+      if (!raw) return null;
+      const parsed = safeJsonParse(raw);
+      return (parsed && typeof parsed === 'object') ? parsed : null;
+    }
+
+    function saveDraft(profile) {
+      localStorage.setItem(draftKey, JSON.stringify(profile));
+    }
+
+    /* -------- apply to view -------- */
+    function applyProfileToView(profile) {
+      $('view-name').textContent      = profile.name      ?? DEFAULT_PROFILE.name;
+      $('view-specialty').textContent = 'Chuyên ngành: ' + (profile.specialty ?? DEFAULT_PROFILE.specialty);
+      $('view-age').textContent       = profile.age       ?? '';
+      $('view-address').textContent   = profile.address   ?? '';
+      $('view-email').textContent     = profile.email     ?? '';
+      $('view-phone').textContent     = profile.phone     ?? '';
+
+      // Avatar: ưu tiên ảnh upload, nếu không có → dùng placeholder initials
+      const imgEl      = $('view-image');
+      const placeholder = $('avatar-placeholder');
+      const initials   = $('avatar-initials');
+
+      if (profile.imageDataUrl) {
+        imgEl.src = profile.imageDataUrl;
+        imgEl.style.display      = 'block';
+        placeholder.style.display = 'none';
+      } else {
+        imgEl.style.display      = 'none';
+        placeholder.style.display = 'flex';
+        initials.textContent     = getInitials(profile.name);
+      }
+    }
+
+    /* -------- apply to edit inputs -------- */
+    function applyProfileToEditInputs(profile) {
+      $('edit-name').value      = profile.name      ?? '';
+      $('edit-specialty').value = profile.specialty ?? '';
+      $('edit-age').value       = profile.age       ?? '';
+      $('edit-address').value   = profile.address   ?? '';
+      $('edit-email').value     = profile.email     ?? '';
+      $('edit-phone').value     = profile.phone     ?? '';
+
+      pendingImageDataUrl = profile.imageDataUrl ?? null;
+      updateEditPreview(pendingImageDataUrl, profile.name);
+    }
+
+    function updateEditPreview(dataUrl, name) {
+      const previewImg   = $('edit-image-preview');
+      const placeholder  = $('edit-avatar-placeholder');
+      const initials     = $('edit-avatar-initials');
+
+      if (dataUrl) {
+        previewImg.src             = dataUrl;
+        previewImg.style.display   = 'block';
+        placeholder.style.display  = 'none';
+      } else {
+        previewImg.style.display   = 'none';
+        placeholder.style.display  = 'flex';
+        initials.textContent       = getInitials(name || $('edit-name').value);
+      }
+    }
+
+    /* -------- mode switching -------- */
+    function showViewMode() {
+      document.querySelectorAll('.view-only').forEach(el => el.classList.remove('hidden'));
+      document.querySelectorAll('.edit-only').forEach(el => el.classList.add('hidden'));
+      // avatar view: restore display based on profile
+      applyProfileToView(currentProfile);
+      $('btn-edit').classList.remove('hidden');
+      $('btn-save').classList.add('hidden');
+      $('btn-cancel').classList.add('hidden');
+    }
+
+    function showEditMode() {
+      document.querySelectorAll('.view-only').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.edit-only').forEach(el => el.classList.remove('hidden'));
+      $('btn-edit').classList.add('hidden');
+      $('btn-save').classList.remove('hidden');
+      $('btn-cancel').classList.remove('hidden');
+    }
+
+    /* -------- gather & validate -------- */
+    function gatherProfileFromInputs() {
+      const name = $('edit-name').value.trim();
+      if (!name) { showError('Họ tên không được để trống!'); return null; }
+
+      const specialty = $('edit-specialty').value.trim();
+
+      const ageRaw = $('edit-age').value;
+      const age    = Number(ageRaw);
+      if (!Number.isInteger(age) || age < 0) {
+        showError('Tuổi phải là số nguyên >= 0!');
+        return null;
+      }
+
+      const address = $('edit-address').value.trim();
+
+      const email = $('edit-email').value.trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Email không đúng định dạng!');
+        return null;
+      }
+
+      const phone = $('edit-phone').value.trim();
+      if (phone && !/^[\d\s+\-().]+$/.test(phone)) {
+        showError('Số điện thoại không hợp lệ!');
+        return null;
+      }
+
+      return { name, specialty, age, address, email, phone, imageDataUrl: pendingImageDataUrl ?? null };
+    }
+
+    /* -------- toast -------- */
+    let toastTimer = null;
+
+    function showToast(msg, type = 'success') {
+      const toast = $('toast');
+      const msgEl = $('toast-msg');
+      msgEl.textContent = msg;
+      toast.className   = 'toast ' + type;
+      toast.classList.remove('hidden');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('hiding'); }, 400);
+      }, 2500);
+    }
+
+    function showError(msg)   { showToast(msg, 'error'); }
+    function showSuccess(msg) { showToast(msg, 'success'); }
+
+    /* -------- run-id reset -------- */
+    function initRunResetIfNeeded() {
+      const storedRunId = localStorage.getItem(runIdKey);
+      if (storedRunId !== SERVER_RUN_ID) {
+        localStorage.removeItem(draftKey);
+        localStorage.setItem(runIdKey, SERVER_RUN_ID);
+      }
+    }
+
+    /* -------- DOMContentLoaded -------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      initRunResetIfNeeded();
+
+      const draft    = loadDraft();
+      currentProfile = { ...DEFAULT_PROFILE, ...(draft || {}) };
+
+      applyProfileToView(currentProfile);
+      applyProfileToEditInputs(currentProfile);
+      showViewMode();
+
+      /* Edit button */
+      $('btn-edit').addEventListener('click', () => {
+        applyProfileToEditInputs(currentProfile);
+        showEditMode();
+      });
+
+      /* Cancel button */
+      $('btn-cancel').addEventListener('click', () => {
+        applyProfileToEditInputs(currentProfile);
+        showViewMode();
+      });
+
+      /* Image upload */
+      $('edit-image').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          pendingImageDataUrl = String(reader.result || '');
+          updateEditPreview(pendingImageDataUrl, $('edit-name').value);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      /* Realtime initials update while typing name in edit mode */
+      $('edit-name').addEventListener('input', () => {
+        if (!pendingImageDataUrl) {
+          $('edit-avatar-initials').textContent = getInitials($('edit-name').value);
+        }
+      });
+
+      /* Save button */
+      $('btn-save').addEventListener('click', () => {
+        const next = gatherProfileFromInputs();
+        if (!next) return;
+
+        currentProfile = next;
+        saveDraft(currentProfile);
+
+        applyProfileToView(currentProfile);
+        showViewMode();
+        showSuccess('Lưu thông tin thành công!');
+      });
+    });
+  </script>
+
+</body>
+
+</html>
